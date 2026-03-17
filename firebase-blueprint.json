@@ -1,0 +1,82 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "A user of the Knowledge Archive platform.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "The user's unique ID." },
+        "email": { "type": "string", "format": "email", "description": "The user's email address." },
+        "displayName": { "type": "string", "description": "The user's display name." },
+        "photoURL": { "type": "string", "description": "The user's profile picture URL." },
+        "role": { "type": "string", "enum": ["admin", "user"], "description": "The user's role." },
+        "favorites": { "type": "array", "items": { "type": "string" }, "description": "List of favorite program IDs." }
+      },
+      "required": ["uid", "email", "role"]
+    },
+    "Program": {
+      "title": "Program",
+      "description": "An archived radio program.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "description": "The title of the program." },
+        "description": { "type": "string", "description": "A brief description of the program." },
+        "audioUrl": { "type": "string", "description": "URL to the audio file." },
+        "date": { "type": "string", "format": "date-time", "description": "The date the program was broadcast." },
+        "faculty": { "type": "string", "description": "The faculty associated with the program." },
+        "type": { "type": "string", "description": "The type/category of the program." },
+        "transcript": { "type": "string", "description": "The full transcript of the program." },
+        "summary": { "type": "string", "description": "An AI-generated summary of the program." },
+        "tags": { "type": "array", "items": { "type": "string" }, "description": "Tags associated with the program." },
+        "views": { "type": "number", "description": "Number of times the program has been viewed/listened to." },
+        "authorId": { "type": "string", "description": "The UID of the admin who uploaded the program." }
+      },
+      "required": ["title", "audioUrl", "date", "authorId"]
+    },
+    "Schedule": {
+      "title": "Schedule",
+      "description": "A scheduled upcoming radio program.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "description": "The title of the scheduled program." },
+        "startTime": { "type": "string", "format": "date-time", "description": "The start time of the program." },
+        "endTime": { "type": "string", "format": "date-time", "description": "The end time of the program." },
+        "host": { "type": "string", "description": "The host of the program." },
+        "authorId": { "type": "string", "description": "The UID of the admin who created the schedule." }
+      },
+      "required": ["title", "startTime", "endTime", "authorId"]
+    },
+    "News": {
+      "title": "News",
+      "description": "A news or magazine article.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "description": "The title of the article." },
+        "content": { "type": "string", "description": "The content of the article." },
+        "date": { "type": "string", "format": "date-time", "description": "The date the article was published." },
+        "authorId": { "type": "string", "description": "The UID of the admin who created the article." },
+        "imageUrl": { "type": "string", "description": "An optional image URL for the article." },
+        "tags": { "type": "array", "items": { "type": "string" }, "description": "Tags associated with the article." }
+      },
+      "required": ["title", "content", "date", "authorId"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "Stores user profiles."
+    },
+    "/programs/{programId}": {
+      "schema": { "$ref": "#/entities/Program" },
+      "description": "Stores archived radio programs."
+    },
+    "/schedules/{scheduleId}": {
+      "schema": { "$ref": "#/entities/Schedule" },
+      "description": "Stores upcoming radio schedules."
+    },
+    "/news/{newsId}": {
+      "schema": { "$ref": "#/entities/News" },
+      "description": "Stores news and magazine articles."
+    }
+  }
+}
